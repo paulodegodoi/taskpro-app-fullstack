@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Form from "./components/Form"
-import Tasks from "./components/Tasks"
+import TasksList from "./components/TasksList"
 import { TasksContext } from "./context/TasksContext"
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
     <TasksContext.Provider value={{ tasks, setTasks }}>
       <div className="container my-3">
         <Form />
-        <Tasks />
+        <TasksList />
       </div>
     </TasksContext.Provider>
   )
