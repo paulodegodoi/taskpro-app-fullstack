@@ -1,29 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Form from "./components/Form"
 import TasksList from "./components/TasksList"
 import { TasksContext } from "./context/TasksContext"
+import { ITask } from "./interface/ITask"
+import api from "./services/api"
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Tarefa 01",
-      description: "...",
-      priority: 1,
-    },
-    {
-      id: 2,
-      name: "Tarefa 02",
-      description: "...",
-      priority: 2,
-    },
-    {
-      id: 3,
-      name: "Teste",
-      description: "teste",
-      priority: 3,
-    },
-  ])
+  const [tasks, setTasks] = useState([])
+
+  useEffect(() => {
+    const getTasks = async () => {
+      await api.get("atividade").then((response) => setTasks(response.data))
+    }
+    getTasks()
+  }, [])
 
   return (
     <TasksContext.Provider value={{ tasks, setTasks }}>

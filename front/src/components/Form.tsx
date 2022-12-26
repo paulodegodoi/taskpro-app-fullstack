@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { TasksContext } from "../context/TasksContext"
 import { ITask } from "../interface/ITask"
+import api from "../services/api"
 
 export default function Form() {
   const { tasks, setTasks } = useContext(TasksContext)
@@ -12,8 +13,14 @@ export default function Form() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
+    async function addNewTask() {
+      await api
+        .post("atividade", newTask)
+        .then((response) => setTasks(response.data))
+    }
     if (newTask != undefined && newTask!.name != "") {
-      setTasks([...tasks, newTask])
+      // setTasks([...tasks, newTask])
+      addNewTask()
     } else {
       window.alert("Preencha o nome da tarefa")
     }
@@ -21,11 +28,6 @@ export default function Form() {
 
   function handleAddNewTask() {
     setNewTask({
-      id:
-        Math.max.apply(
-          Math,
-          tasks.map((atv) => atv.id)
-        ) + 1,
       name: taskName,
       description: taskDescription,
       priority: taskPriority,

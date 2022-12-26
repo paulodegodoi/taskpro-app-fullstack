@@ -8,8 +8,8 @@ namespace proAtividadeAPI.Models
   public class Atividade
   {
     public int Id { get; set; }
-    public string Nome { get; set; }
-    public string Descricao { get; set; }
-    public Prioridade Prioridade { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Priority { get; set; }
   }
 }

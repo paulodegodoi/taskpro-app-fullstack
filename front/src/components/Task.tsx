@@ -7,7 +7,7 @@ import {
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Modal } from "react-bootstrap"
-import { HTMLInputTypeAttribute, ReactHTMLElement, useState } from "react"
+import { useState } from "react"
 
 interface ITaskProps {
   task: ITask
