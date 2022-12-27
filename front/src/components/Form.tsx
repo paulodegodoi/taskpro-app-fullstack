@@ -16,10 +16,9 @@ export default function Form() {
     async function addNewTask() {
       await api
         .post("atividade", newTask)
-        .then((response) => setTasks(response.data))
+        .then((response) => setTasks([...tasks, response.data]))
     }
     if (newTask != undefined && newTask!.name != "") {
-      // setTasks([...tasks, newTask])
       addNewTask()
     } else {
       window.alert("Preencha o nome da tarefa")

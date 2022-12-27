@@ -7,24 +7,36 @@ import {
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Modal } from "react-bootstrap"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import api from "../services/api"
+import { TasksContext } from "../context/TasksContext"
+import { TaskToUpdateContext } from "../context/TaskToUpdateContext"
 
 interface ITaskProps {
   task: ITask
-  handleDeleteTask: (id: number) => void
-  handleEditTask: (task: ITask) => void
+  setShowModal: (value: boolean) => void
 }
 
 export default function Task(props: ITaskProps) {
+  const { tasks, setTasks } = useContext(TasksContext!)
+  const { taskToUpdate, setTaskToUpdate } = useContext(TaskToUpdateContext)
+
   const [task, setTask] = useState(props.task)
-  const handleDeleteTask = props.handleDeleteTask
 
-  const [taskToEdit, setTaskToEdit] = useState<ITask>()
-  const [showModal, setShowModal] = useState(false)
+  // const handleDeleteTask = props.handleDeleteTask
 
-  function handleEditTask() {
-    setTask(taskToEdit!)
-    setShowModal(false)
+  // const [taskToEdit, setTaskToEdit] = useState<ITask>()
+  // const [showModal, setShowModal] = useState(false)
+
+  function handleDeleteTask(id: number) {
+    api.delete("atividade/" + id).then((response) => {
+      if (response.data == true) {
+        const filteredTasks = tasks.filter((atv) => atv.id != id)
+        setTasks([...filteredTasks])
+      } else {
+        alert("Não foi possível remover a tarefa")
+      }
+    })
   }
 
   function textHandler(
@@ -35,21 +47,21 @@ export default function Task(props: ITaskProps) {
     const { name, value } = e.target
     if (name == "priority") {
       const intValue = parseInt(value)
-      setTaskToEdit({
-        ...taskToEdit!,
+      setTaskToUpdate({
+        ...taskToUpdate!,
         [name]: intValue,
       })
     } else {
-      setTaskToEdit({
-        ...taskToEdit!,
+      setTaskToUpdate({
+        ...taskToUpdate!,
         [name]: value,
       })
     }
   }
 
-  function handleShowModal(selectedTask: ITask) {
-    setTaskToEdit(selectedTask)
-    setShowModal(true)
+  function handleShowUpdateModal(selectedTask: ITask) {
+    setTaskToUpdate(selectedTask)
+    props.setShowModal(true)
   }
 
   function setPriorityName(value: number, style?: boolean) {
@@ -92,7 +104,7 @@ export default function Task(props: ITaskProps) {
           <div className="d-flex justify-content-end">
             <button
               className="me-2 btn btn-sm btn-outline-primary"
-              onClick={() => handleShowModal(props.task)}
+              onClick={() => handleShowUpdateModal(props.task)}
             >
               <FontAwesomeIcon className="me-1" icon={faPen} />
               Editar
@@ -107,9 +119,9 @@ export default function Task(props: ITaskProps) {
           </div>
         </div>
       </div>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar tarefa: {taskToEdit?.name}</Modal.Title>
+          <Modal.Title>Editar tarefa: {taskToUpdate?.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="col-md-12 mb-3">
@@ -121,7 +133,7 @@ export default function Task(props: ITaskProps) {
               type="text"
               className="form-control"
               placeholder="Nome da tarefa"
-              value={taskToEdit?.name}
+              value={taskToUpdate?.name}
               // newTaskName !== undefined ? newTaskName :
               onChange={textHandler}
             />
@@ -134,7 +146,7 @@ export default function Task(props: ITaskProps) {
               name="description"
               className="form-control"
               placeholder="Descrição da tarefa"
-              value={taskToEdit?.description}
+              value={taskToUpdate?.description}
               onChange={textHandler}
             />
           </div>
@@ -146,7 +158,7 @@ export default function Task(props: ITaskProps) {
               name="priority"
               className="form-select"
               aria-label="Selecione uma prioridade"
-              value={taskToEdit?.priority}
+              value={taskToUpdate?.priority}
               onChange={textHandler}
             >
               <option value={4}>Sem prioridade</option>
@@ -164,7 +176,7 @@ export default function Task(props: ITaskProps) {
             Save Changes
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

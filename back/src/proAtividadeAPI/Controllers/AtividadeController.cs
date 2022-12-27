@@ -32,12 +32,12 @@ namespace proAtividadeAPI.Controllers
     }
 
     [HttpPost]
-    public IEnumerable<Atividade> Post(Atividade atv)
+    public Atividade Post(Atividade atv)
     {
 
       _context.Atividades.Add(atv);
       if (_context.SaveChanges() > 0)
-        return _context.Atividades;
+        return atv;
       else
         throw new Exception("Não foi possível adicionar a atividade.");
     }
