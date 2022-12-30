@@ -7,25 +7,26 @@ import { ITask } from "./interface/ITask"
 import api from "./services/api"
 
 function App() {
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState<ITask[]>([])
   const [taskToUpdate, setTaskToUpdate] = useState<ITask | undefined>(undefined)
 
   useEffect(() => {
     const getTasks = async () => {
       await api.get("atividade").then((response) => setTasks(response.data))
+      console.log("effect")
     }
     getTasks()
   }, [])
 
   return (
-    <TasksContext.Provider value={{ tasks, setTasks }}>
-      <div className="container my-3">
+    <div className="container my-3">
+      <TasksContext.Provider value={{ tasks, setTasks }}>
         <Form />
         <TaskToUpdateContext.Provider value={{ taskToUpdate, setTaskToUpdate }}>
           <TasksList />
         </TaskToUpdateContext.Provider>
-      </div>
-    </TasksContext.Provider>
+      </TasksContext.Provider>
+    </div>
   )
 }
 

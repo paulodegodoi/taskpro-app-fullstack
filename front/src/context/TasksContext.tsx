@@ -18,4 +18,4 @@ const initialValue = {
   setTasks: (a: any) => {},
 }
 
-export const TasksContext = createContext(initialValue)
+export const TasksContext = createContext<TasksContextProps>(initialValue)

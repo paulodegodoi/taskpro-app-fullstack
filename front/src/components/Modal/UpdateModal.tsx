@@ -1,26 +1,33 @@
 import { useContext } from "react"
 import { Button, Modal } from "react-bootstrap"
+import { TasksContext } from "../../context/TasksContext"
 import { TaskToUpdateContext } from "../../context/TaskToUpdateContext"
-import { ITask } from "../../interface/ITask"
+import api from "../../services/api"
 
 interface IUpdateModalProps {
-  showModal: boolean
-  setShowModal: (value: boolean) => void
-  taskToEdit: ITask | undefined
-  setTaskToEdit: (task: ITask) => void
+  showUpdateModal: boolean
+  setShowUpdateModal: (value: boolean) => void
 }
 
 export default function UpdateModal({
-  showModal,
-  setShowModal,
-  taskToEdit,
-  setTaskToEdit,
+  showUpdateModal,
+  setShowUpdateModal,
 }: IUpdateModalProps) {
+  const { tasks, setTasks } = useContext(TasksContext)
   const { taskToUpdate, setTaskToUpdate } = useContext(TaskToUpdateContext)
 
-  function handleEditTask() {
-    // setTask(taskToUpdate!)
-    setShowModal(false)
+  async function handleEditTask() {
+    await api
+      .put("atividade/" + taskToUpdate!.id, taskToUpdate)
+      .then((response) => {
+        if (response.status == 200) {
+          alert("Tarefa atualizada com sucesso.")
+          console.log(response.data)
+          const { id } = response.data
+          setTasks(tasks.map((task) => (task.id === id ? response.data : task)))
+        } else alert("Ocorreu um erro ao atualizar a tarefa.")
+      })
+    setShowUpdateModal(false)
   }
 
   function textHandler(
@@ -31,21 +38,22 @@ export default function UpdateModal({
     const { name, value } = e.target
     if (name == "priority") {
       const intValue = parseInt(value)
-      setTaskToEdit({
-        ...taskToEdit!,
+      setTaskToUpdate({
+        ...taskToUpdate!,
         [name]: intValue,
       })
     } else {
-      setTaskToEdit({
-        ...taskToEdit!,
+      setTaskToUpdate({
+        ...taskToUpdate!,
         [name]: value,
       })
     }
   }
+
   return (
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+    <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Editar tarefa: {taskToEdit?.name}</Modal.Title>
+        <Modal.Title>Editar tarefa: {taskToUpdate?.name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="col-md-12 mb-3">
@@ -58,7 +66,6 @@ export default function UpdateModal({
             className="form-control"
             placeholder="Nome da tarefa"
             value={taskToUpdate?.name}
-            // newTaskName !== undefined ? newTaskName :
             onChange={textHandler}
           />
         </div>
@@ -93,11 +100,11 @@ export default function UpdateModal({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => setShowModal(false)}>
-          Close
+        <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
+          Fechar
         </Button>
         <Button variant="primary" onClick={handleEditTask}>
-          Save Changes
+          Salvar
         </Button>
       </Modal.Footer>
     </Modal>
