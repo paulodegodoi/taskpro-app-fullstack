@@ -22,7 +22,6 @@ export default function Task({
 }: ITaskProps) {
   const { setTaskToUpdate } = useContext(TaskToUpdateContext)
 
-  console.log(task)
   function handleShowUpdateModal(selectedTask: ITask) {
     setTaskToUpdate(selectedTask)
     setShowUpdateModal(true)
