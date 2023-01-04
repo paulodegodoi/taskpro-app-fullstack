@@ -11,14 +11,15 @@ export default function TasksList() {
 
   return (
     <div className="col-12">
-      {tasks.map((task) => (
-        <Task
-          key={task.id}
-          task={task}
-          setShowUpdateModal={setShowUpdateModal}
-          setShowDeleteModal={setShowDeleteModal}
-        />
-      ))}
+      {tasks != null &&
+        tasks.map((task) => (
+          <Task
+            key={task.id}
+            task={task}
+            setShowUpdateModal={setShowUpdateModal}
+            setShowDeleteModal={setShowDeleteModal}
+          />
+        ))}
       <UpdateModal
         showUpdateModal={showUpdateModal}
         setShowUpdateModal={setShowUpdateModal}

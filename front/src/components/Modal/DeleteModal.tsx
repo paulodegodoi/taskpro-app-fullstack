@@ -18,7 +18,7 @@ export default function DeleteModal({
 
   async function handleDeleteTask() {
     await api.delete("atividade/" + taskToUpdate!.id).then((response) => {
-      if (response.data == true) {
+      if (response.data.message == "Deletado") {
         const filteredTasks = tasks.filter((atv) => atv.id != taskToUpdate!.id)
         setTasks(filteredTasks)
       } else alert("Não foi possível remover a tarefa")
