@@ -3,15 +3,20 @@ import { Button, Modal } from "react-bootstrap"
 import { TasksContext } from "../../context/TasksContext"
 import { TaskToUpdateContext } from "../../context/TaskToUpdateContext"
 import api from "../../services/api"
+import { AlertVariantEnum } from "../AlertMessage"
 
 interface IDeleteModalProps {
   showDeleteModal: boolean
   setShowDeleteModal: (value: boolean) => void
+  setAlertMessage: (message: string) => void
+  setAlertVariant: (variant: AlertVariantEnum | undefined) => void
 }
 
 export default function DeleteModal({
   showDeleteModal,
   setShowDeleteModal,
+  setAlertMessage,
+  setAlertVariant,
 }: IDeleteModalProps) {
   const { tasks, setTasks } = useContext(TasksContext)
   const { taskToUpdate } = useContext(TaskToUpdateContext)
@@ -21,7 +26,19 @@ export default function DeleteModal({
       if (response.data.message == "Deletado") {
         const filteredTasks = tasks.filter((atv) => atv.id != taskToUpdate!.id)
         setTasks(filteredTasks)
-      } else alert("Não foi possível remover a tarefa")
+
+        setAlertMessage("Tarefa excluída com sucesso.")
+        setAlertVariant(AlertVariantEnum.Success)
+        setTimeout(() => {
+          setAlertMessage("")
+        }, 3000)
+      } else {
+        setAlertMessage("Não foi possível remover a tarefa.")
+        setAlertVariant(AlertVariantEnum.Fail)
+        setTimeout(() => {
+          setAlertMessage("")
+        }, 3000)
+      }
     })
     setShowDeleteModal(false)
   }

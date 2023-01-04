@@ -3,15 +3,20 @@ import { Button, Modal } from "react-bootstrap"
 import { TasksContext } from "../../context/TasksContext"
 import { TaskToUpdateContext } from "../../context/TaskToUpdateContext"
 import api from "../../services/api"
+import { AlertVariantEnum } from "../AlertMessage"
 
 interface IUpdateModalProps {
   showUpdateModal: boolean
   setShowUpdateModal: (value: boolean) => void
+  setAlertMessage: (message: string) => void
+  setAlertVariant: (variant: AlertVariantEnum | undefined) => void
 }
 
 export default function UpdateModal({
   showUpdateModal,
   setShowUpdateModal,
+  setAlertMessage,
+  setAlertVariant,
 }: IUpdateModalProps) {
   const { tasks, setTasks } = useContext(TasksContext)
   const { taskToUpdate, setTaskToUpdate } = useContext(TaskToUpdateContext)
@@ -21,11 +26,21 @@ export default function UpdateModal({
       .put("atividade/" + taskToUpdate!.id, taskToUpdate)
       .then((response) => {
         if (response.status == 200) {
-          alert("Tarefa atualizada com sucesso.")
-          console.log(response.data)
           const { id } = response.data
           setTasks(tasks.map((task) => (task.id === id ? response.data : task)))
-        } else alert("Ocorreu um erro ao atualizar a tarefa.")
+
+          setAlertMessage("Tarefa atualizada com sucesso.")
+          setAlertVariant(AlertVariantEnum.Success)
+          setTimeout(() => {
+            setAlertMessage("")
+          }, 3000)
+        } else {
+          setAlertMessage("Não foi possível atualizar a tarefa.")
+          setAlertVariant(AlertVariantEnum.Fail)
+          setTimeout(() => {
+            setAlertMessage("")
+          }, 3000)
+        }
       })
     setShowUpdateModal(false)
   }
