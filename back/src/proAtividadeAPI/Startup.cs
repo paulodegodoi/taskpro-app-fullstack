@@ -13,7 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using proAtividadeAPI.Data;
+using proAtividade.Data.Context;
+using ProAtividade.Data.Repositories;
+using ProAtividade.Domain.Interfaces.Repositories;
+using ProAtividade.Domain.Interfaces.Services;
+using ProAtividade.Domain.Services;
 
 namespace proAtividadeAPI
 {
@@ -32,6 +36,11 @@ namespace proAtividadeAPI
       services.AddDbContext<DataContext>(
         options => options.UseSqlServer(Configuration.GetConnectionString("Default"))
       );
+
+      services.AddScoped<ITaskRepo, AtividadeRepo>();
+      services.AddScoped<IGenericRepo, GenericRepo>();
+      services.AddScoped<ITaskService, AtividadeService>();
+
       services.AddControllers()
               .AddJsonOptions(
                 options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())

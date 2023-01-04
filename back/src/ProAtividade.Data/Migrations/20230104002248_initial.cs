@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace proAtividadeAPI.Data.Migrations
+namespace ProAtividade.Data.Migrations
 {
     public partial class initial : Migration
     {
@@ -12,9 +13,11 @@ namespace proAtividadeAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Prioridade = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "varchar(100)", nullable: true),
+                    Description = table.Column<string>(type: "varchar(220)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataConclusao = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
