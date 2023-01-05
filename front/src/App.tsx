@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import Header from "./components/Header"
+import NewTaskMenu from "./components/NewTaskMenu"
 import NewTaskModal from "./components/Modal/NewTaskModal"
-import TasksList from "./components/TasksList"
 import { TasksContext } from "./context/TasksContext"
 import { TaskToUpdateContext } from "./context/TaskToUpdateContext"
 import { ITask } from "./interface/ITask"
 import api from "./services/api"
+import Header from "./components/Header"
+import Atividades from "./pages/atividades/Atividades"
+import { BrowserRouter as Router } from "react-router-dom"
+import MainRoutes from "./routes"
 
 function App() {
   const [tasks, setTasks] = useState<ITask[]>([])
@@ -20,18 +23,25 @@ function App() {
   }, [])
 
   return (
-    <div className="container my-3">
-      <TasksContext.Provider value={{ tasks, setTasks }}>
-        <Header setShowNewTaskModal={setShowNewTaskModal} />
-        <NewTaskModal
-          showNewTaskModal={showNewTaskModal}
-          setShowNewTaskModal={setShowNewTaskModal}
-        />
-        <TaskToUpdateContext.Provider value={{ taskToUpdate, setTaskToUpdate }}>
-          <TasksList />
-        </TaskToUpdateContext.Provider>
-      </TasksContext.Provider>
-    </div>
+    <>
+      <Router>
+        <Header />
+        <div className="container my-3">
+          <TasksContext.Provider value={{ tasks, setTasks }}>
+            <NewTaskMenu setShowNewTaskModal={setShowNewTaskModal} />
+            <NewTaskModal
+              showNewTaskModal={showNewTaskModal}
+              setShowNewTaskModal={setShowNewTaskModal}
+            />
+            <TaskToUpdateContext.Provider
+              value={{ taskToUpdate, setTaskToUpdate }}
+            >
+              <MainRoutes />
+            </TaskToUpdateContext.Provider>
+          </TasksContext.Provider>
+        </div>
+      </Router>
+    </>
   )
 }
 
