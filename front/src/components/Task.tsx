@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons"
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { TaskToUpdateContext } from "../context/TaskToUpdateContext"
 
 interface ITaskProps {
@@ -35,24 +35,31 @@ export default function Task({
   function setPriorityName(value: number, style?: boolean) {
     switch (value) {
       case 1:
-        return !style ? "Baixa" : "text-success"
+        return !style ? "Baixa" : "success"
       case 2:
-        return !style ? "Normal" : "text-warning"
+        return !style ? "Normal" : "warning"
       case 3:
-        return !style ? "Alta" : "text-danger"
+        return !style ? "Alta" : "danger"
       default:
         return "Não definida"
     }
   }
 
   return (
-    <div key={task.id} className="card shadow-sm my-3">
+    <div
+      key={task.id}
+      className={
+        "card shadow-sm my-3 border-" + setPriorityName(task.priority, true)
+      }
+    >
       <div className="card-body">
         <div className="d-flex justify-content-between">
           <h5 className="card-title">{task.name}</h5>
           <h6 className="card-subtitle">
             Prioridade:
-            <span className={"ms-1 " + setPriorityName(task.priority, true)}>
+            <span
+              className={"ms-1 text-" + setPriorityName(task.priority, true)}
+            >
               <FontAwesomeIcon
                 className="me-1"
                 icon={
