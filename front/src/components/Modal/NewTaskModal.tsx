@@ -14,7 +14,6 @@ export default function NewTaskModal({
   setShowNewTaskModal,
 }: INewTaskModalProps) {
   const { tasks, setTasks } = useContext(TasksContext)
-  const [newTask, setNewTask] = useState<ITask>()
   const [taskName, setTaskName] = useState("")
   const [taskDescription, setTaskDescription] = useState("")
   const [taskPriority, setTaskPriority] = useState(0)
